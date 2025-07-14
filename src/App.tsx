@@ -4,19 +4,11 @@ import { useDebounce } from 'react-use';
 import type { ICommune } from './models/ICommune';
 import type { IDepartement } from './models/IDepartement';
 
+import { getTextesDPVigilance } from './services/meteoFranceDPVigilance';
+
 import Search from './components/Search'
 import Spinner from './components/Spinner';
 import BulletinVigilanceDepartement from './components/BulletinVigilanceDepartement';
-
-const PUBLIC_API_METEO_FRANCE_DPVIGILANCE_API_BASE_URL = 'https://public-api.meteofrance.fr/public/DPVigilance/v1';
-const PUBLIC_API_METEO_FRANCE_DPVIGILANCE_OAUTH_TOKEN = import.meta.env.VITE_PUBLIC_API_METEO_FRANCE_DPVIGILANCE_OAUTH_TOKEN;
-const PUBLIC_API_METEO_FRANCE_DPVIGILANCE_API_OPTIONS = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    authorization: `Bearer ${PUBLIC_API_METEO_FRANCE_DPVIGILANCE_OAUTH_TOKEN}`
-  }
-}
 
 const DATA_GOUV_FR_DECOUPAGE_ADMINISTRATIF_API_BASE_URL = 'https://geo.api.gouv.fr';
 
@@ -123,9 +115,7 @@ const App = () => {
     setErrorMessageDPVigilance('');
 
     try {
-      const endpoint = `${PUBLIC_API_METEO_FRANCE_DPVIGILANCE_API_BASE_URL}/textesvigilance/encours`;
-
-      const response = await fetch(endpoint, PUBLIC_API_METEO_FRANCE_DPVIGILANCE_API_OPTIONS);
+      const response = await getTextesDPVigilance();
 
       if(!response.ok) {
         throw new Error('Failed to fetch données publiques vigilance');
@@ -140,8 +130,8 @@ const App = () => {
         return;
       }
 
-      setBulletinNational(data.product.text_bloc_items.find((tbc) => tbc.domain_name == "France") || null)
-      setBulletinDepartement(data.product.text_bloc_items.find((tbc) => tbc.domain_name == selectedDepartement?.nom) || null)
+      setBulletinNational(data.data.product.text_bloc_items.find((tbc) => tbc.domain_name == "France") || null)
+      setBulletinDepartement(data.data.product.text_bloc_items.find((tbc) => tbc.domain_name == selectedDepartement?.nom) || null)
     } catch (error) {
       console.error(`Error fetching données publiques vigilance: ${error}`);
       setErrorMessageDPVigilance('Une erreur est survenue lors de la récupération des données publiques vigilance. Veuillez réessayer plus tard.');
@@ -162,7 +152,7 @@ const App = () => {
 
   useEffect(() => {
     fetchDPVigilance();
-  }, [selectedDepartement])
+  }, [selectedDepartement]);
 
   const handleCommuneSelection = (nomCommune: string) => {
     
@@ -177,53 +167,22 @@ const App = () => {
 
   return (
     <main>
-      <div className='pattern' />
+      <div className="main-content-wrapper">
+        <h2 className="text-4xl text-center">Vigilance Météo Villes</h2>
 
-      <div className='wrapper'>
-        <h2>Vigilance Météo Villes</h2>
-
-        <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
-        <section className='all-communes'>
-          <h2 className='mt-[40px]'>Communes</h2>
-
-          {isLoadingCommunes ? (
-            <Spinner />
-          ) : errorMessageCommunes ? (
-            <p className='text-red-500'>{errorMessageCommunes}</p>
-          ) : (
-            <ul>
-              {communesList?.map((commune: ICommune) => (
-                <li key={`${commune.code}-${commune.siren || 'nosiren'}`}>
-                  <div onClick={() => handleCommuneSelection(commune.nom)}>{commune.nom}</div>
-                </li>
-              ))}
-            </ul>
-          )}
+        <section className="border-2 border-orange-400">
+          <Search
+            searchTerm={searchTerm} setSearchTerm={setSearchTerm}
+            isLoadingResults={isLoadingCommunes} errorMessageResults={errorMessageCommunes} resultsList={communesList} handleResultSelection={handleCommuneSelection}
+          />
         </section>
 
-        <section className='bulletin-departement'>
-          <h2 className='mt-[40px]'>Bulletin Département</h2>
-
-          {selectedDepartement ? (
-            isLoadingDepartement ? (
-              <Spinner />
-            ) : errorMessageDepartement ? (
-              <p className='text-red-500'>{errorMessageDepartement}</p>
-            ) : errorMessageDPVigilance ? (
-              <p className='text-red-500'>{errorMessageDPVigilance}</p>
-            ) : (
-              <BulletinVigilanceDepartement selectedCommune={selectedCommune} selectedDepartement={selectedDepartement} bulletinDepartement={bulletinDepartement}/>
-            )
-          ) : (
-            isLoadingDepartement ? (
-              <Spinner />
-            ) : (
-              <div>
-                <p>Sélectionnez une commune</p>
-              </div>
-            )
-          )}
+        <section className="bulletin-wrapper">
+          <BulletinVigilanceDepartement 
+            selectedCommune={selectedCommune} selectedDepartement={selectedDepartement} bulletinDepartement={bulletinDepartement}
+            isLoadingDepartement={isLoadingDepartement} errorMessageDepartement={errorMessageDepartement}
+            errorMessageDPVigilance={errorMessageDPVigilance}
+          />
         </section>
       </div>
     </main>
