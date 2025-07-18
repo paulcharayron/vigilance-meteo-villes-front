@@ -4,11 +4,10 @@ import { useDebounce } from 'react-use';
 import type { ICommune } from './models/ICommune';
 import type { IDepartement } from './models/IDepartement';
 
-import { getTextesDPVigilance } from './services/meteoFranceDPVigilance';
+import { getTextesDPVigilance, TEST_DATA } from './services/meteoFranceDPVigilance';
 
-import Search from './components/Search'
-import Spinner from './components/Spinner';
 import BulletinVigilanceDepartement from './components/BulletinVigilanceDepartement';
+import SearchCommune from './components/SearchCommune';
 
 const DATA_GOUV_FR_DECOUPAGE_ADMINISTRATIF_API_BASE_URL = 'https://geo.api.gouv.fr';
 
@@ -122,6 +121,8 @@ const App = () => {
       }
 
       const data = await response.json();
+      // const data = JSON.parse(TEST_DATA);
+      console.log(data)
       
       if(data.Response === 'False') {
         setErrorMessageDPVigilance(data.error || 'Erreur de récupération des données publiques vigilance');
@@ -132,6 +133,8 @@ const App = () => {
 
       setBulletinNational(data.data.product.text_bloc_items.find((tbc) => tbc.domain_name == "France") || null)
       setBulletinDepartement(data.data.product.text_bloc_items.find((tbc) => tbc.domain_name == selectedDepartement?.nom) || null)
+      // setBulletinNational(data.text_bloc_items.find((tbc) => tbc.domain_name == "France") || null)
+      // setBulletinDepartement(data.text_bloc_items.find((tbc) => tbc.domain_name == selectedDepartement?.nom) || null)
     } catch (error) {
       console.error(`Error fetching données publiques vigilance: ${error}`);
       setErrorMessageDPVigilance('Une erreur est survenue lors de la récupération des données publiques vigilance. Veuillez réessayer plus tard.');
@@ -167,17 +170,19 @@ const App = () => {
 
   return (
     <main>
-      <div className="main-content-wrapper">
-        <h2 className="text-4xl text-center">Vigilance Météo Villes</h2>
+      <div className="pattern"/>
 
-        <section className="border-2 border-orange-400">
-          <Search
+      <div className="wrapper">
+        <header className="flex flex-col items-center">
+          <h1 className="text-center text-white text-4xl font-bold w-1/2">Les <span className="text-gradient">données de vigilance météo</span> de <span className="text-gradient">votre commune</span> en un clic</h1>
+
+          <SearchCommune
             searchTerm={searchTerm} setSearchTerm={setSearchTerm}
             isLoadingResults={isLoadingCommunes} errorMessageResults={errorMessageCommunes} resultsList={communesList} handleResultSelection={handleCommuneSelection}
           />
-        </section>
+        </header>
 
-        <section className="bulletin-wrapper">
+        <section className="mt-18 flex flex-col items-center">
           <BulletinVigilanceDepartement 
             selectedCommune={selectedCommune} selectedDepartement={selectedDepartement} bulletinDepartement={bulletinDepartement}
             isLoadingDepartement={isLoadingDepartement} errorMessageDepartement={errorMessageDepartement}

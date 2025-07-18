@@ -1,22 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
 @import "tailwindcss";
 
+@theme {
+    --background-image-hero-pattern: url("/hero-bg.png");
+
+    --color-meteofr-blue: #073D79;
+}
 
 @layer base {
     body {
-        @apply flex flex-col min-h-screen border-2
-    }
-
-    main {
-        @apply flex-1 border-2 border-green-400
+        font-family: "DM Sans", serif;
+        font-optical-sizing: auto;
+        background: linear-gradient(to right, #0E0E0E, #101010);
     }
 }
 
 @layer components {
-    .main-content-wrapper {
-        @apply bg-amber-700 border-2 border-red-400
+    .pattern {
+        @apply bg-hero-pattern w-full h-screen bg-center bg-cover absolute z-0;
+    }
+    
+    .wrapper {
+        @apply px-5 py-12 max-w-7xl mx-auto flex flex-col relative z-10;
     }
 
-    .bulletin-wrapper {
-        @apply border-2 border-blue-400
+    
+}
+
+@layer utilities {
+    .text-gradient {
+        @apply bg-linear-to-r from-[#6A7A97] via-[#DFEEFA] to-[#6A7A97] bg-clip-text text-transparent;
     }
 }
