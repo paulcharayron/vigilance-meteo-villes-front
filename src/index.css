@@ -31,6 +31,8 @@
 
 @layer utilities {
     .text-gradient {
-        @apply bg-linear-to-r from-[#6A7A97] via-[#DFEEFA] to-[#6A7A97] bg-clip-text text-transparent;
+        /* @apply bg-linear-to-r from-[#6A7A97] via-[#DFEEFA] to-[#6A7A97] bg-clip-text text-transparent; */
+        /* @apply bg-linear-to-r from-[#EAEAEA] via-[#A0A0A0] to-[#EAEAEA] bg-clip-text text-transparent; */
+        @apply bg-linear-to-r from-meteofr-blue via-[#EEEEEE] to-meteofr-blue bg-clip-text text-transparent;
     }
 }

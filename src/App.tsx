@@ -4,7 +4,7 @@ import { useDebounce } from 'react-use';
 import type { ICommune } from './models/ICommune';
 import type { IDepartement } from './models/IDepartement';
 
-import { getTextesDPVigilance, TEST_DATA } from './services/meteoFranceDPVigilance';
+import { getTextesDPVigilance } from './services/meteoFranceDPVigilance';
 
 import BulletinVigilanceDepartement from './components/BulletinVigilanceDepartement';
 import SearchCommune from './components/SearchCommune';
@@ -121,8 +121,6 @@ const App = () => {
       }
 
       const data = await response.json();
-      // const data = JSON.parse(TEST_DATA);
-      console.log(data)
       
       if(data.Response === 'False') {
         setErrorMessageDPVigilance(data.error || 'Erreur de récupération des données publiques vigilance');
@@ -133,8 +131,6 @@ const App = () => {
 
       setBulletinNational(data.data.product.text_bloc_items.find((tbc) => tbc.domain_name == "France") || null)
       setBulletinDepartement(data.data.product.text_bloc_items.find((tbc) => tbc.domain_name == selectedDepartement?.nom) || null)
-      // setBulletinNational(data.text_bloc_items.find((tbc) => tbc.domain_name == "France") || null)
-      // setBulletinDepartement(data.text_bloc_items.find((tbc) => tbc.domain_name == selectedDepartement?.nom) || null)
     } catch (error) {
       console.error(`Error fetching données publiques vigilance: ${error}`);
       setErrorMessageDPVigilance('Une erreur est survenue lors de la récupération des données publiques vigilance. Veuillez réessayer plus tard.');
@@ -158,6 +154,7 @@ const App = () => {
   }, [selectedDepartement]);
 
   const handleCommuneSelection = (nomCommune: string) => {
+      setBulletinDepartement(null);
     
     const selCommune = communesList.find((c) => c.nom == nomCommune);
     if(!selCommune) {
@@ -186,7 +183,7 @@ const App = () => {
           <BulletinVigilanceDepartement 
             selectedCommune={selectedCommune} selectedDepartement={selectedDepartement} bulletinDepartement={bulletinDepartement}
             isLoadingDepartement={isLoadingDepartement} errorMessageDepartement={errorMessageDepartement}
-            errorMessageDPVigilance={errorMessageDPVigilance}
+            isLoadingDPVigilance={isLoadingDPVigilance} errorMessageDPVigilance={errorMessageDPVigilance}
           />
         </section>
       </div>
