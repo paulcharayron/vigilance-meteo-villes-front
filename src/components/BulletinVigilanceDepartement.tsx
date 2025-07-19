@@ -6,6 +6,7 @@ const BulletinVigilanceDepartement = ({
     isLoadingDepartement, errorMessageDepartement,
     isLoadingDPVigilance, errorMessageDPVigilance
 }) => {
+    const DEPARTEMENT_FLAG_BASE_URL = import.meta.env.VITE_DEPARTEMENT_FLAG_BASE_URL;
 
     return (
         <div className="w-4/5 rounded-t-xl rounded-b-md flex flex-col items-center bg-white">
@@ -13,7 +14,16 @@ const BulletinVigilanceDepartement = ({
                 <p className="text-xl md:text-2xl font-bold">Bulletin Départemental</p>
                 {
                     (selectedCommune && selectedDepartement)
-                    ? <p>{`${selectedCommune.nom} (${selectedDepartement.nom}, ${selectedDepartement.code})`}</p>
+                    ? (
+                        <div className="w-full flex flex-col items-center">
+                            <p>{`${selectedCommune.nom} (${selectedDepartement.nom}, ${selectedDepartement.code})`}</p>
+                            <img
+                                src={`${DEPARTEMENT_FLAG_BASE_URL}/${selectedDepartement.code}`}
+                                alt="drapeau departement"
+                                className="mt-1 h-8"
+                            />
+                        </div>
+                    )
                     : <p className="text-gray-200 italic">Sélectionnez une commune</p>
                 }
             </div>
