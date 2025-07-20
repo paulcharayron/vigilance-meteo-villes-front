@@ -15,7 +15,7 @@ const BulletinVigilanceDepartementBlocItem = ({
                     className={`mt-1 ml-1 h-4 transition-transform duration-300 ease-in-out ${isBlocItemCollapsed ? '' : 'rotate-90'} cursor-pointer`}
                     onClick={(e) => {setIsBlocItemCollapsed(!isBlocItemCollapsed)}}
                 />
-                <div>{blocItem.type_name}</div>
+                <div>{blocItem.type_name ? blocItem.type_name.charAt(0).toUpperCase() + blocItem.type_name.slice(1) : 'Bloc nom nommé'}</div>
             </div>
             {/* BLOC_ITEM collapsible part */}
             {!isBlocItemCollapsed && (<ul className="w-full flex flex-col items-start p-3">

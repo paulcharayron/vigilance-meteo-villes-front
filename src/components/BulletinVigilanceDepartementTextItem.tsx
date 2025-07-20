@@ -15,7 +15,7 @@ const BulletinVigilanceDepartementTextItem = ({
                     className={`mt-1 ml-1 h-4 transition-transform duration-300 ease-in-out ${isTextItemCollapsed ? '' : 'rotate-90'} cursor-pointer`}
                     onClick={(e) => {setIsTextItemCollapsed(!isTextItemCollapsed)}}
                 />
-                <div>{textItem.hazard_name ? textItem.hazard_name.charAt(0).toUpperCase() + textItem.hazard_name.slice(1) : ''}</div>
+                <div>{textItem.hazard_name ? textItem.hazard_name.charAt(0).toUpperCase() + textItem.hazard_name.slice(1) : 'Nom de risque inconnu'}</div>
             </div>
             {/* TEXT_ITEM : collapsible part */}
             {!isTextItemCollapsed && (

@@ -45,12 +45,14 @@ const BulletinVigilanceDepartementTermItem = ({
                     {termItem.subdivision_text?.map((subdivisionText, subdivisionTextIndex) => (
                         <li key={`${selectedDepartement.code}-${blocItem.id}-${textItem.type_code}-${termItem.term_names}-${subdivisionTextIndex}`}
                             className="">
-                            <b>{subdivisionText.bold_text.substring(0, subdivisionText.bold_text.length-2)}</b>
+                            <b>{subdivisionText.bold_text.substring(0, subdivisionText.bold_text.length-2) ? 
+                                    subdivisionText.bold_text.substring(0, subdivisionText.bold_text.length-2).charAt(0).toUpperCase() + subdivisionText.bold_text.substring(0, subdivisionText.bold_text.length-2).slice(1) 
+                                    : 'Sous-division non nommée'}{}</b>
                             <ul className="flex flex-col items-start">
                                 {subdivisionText.text?.map((paragraph, paragraphIndex) => (
-                                    paragraph && <li key={`${selectedDepartement.code}-${blocItem.id}-${textItem.type_code}-${termItem.term_names}-${subdivisionTextIndex}-${paragraphIndex}`}
+                                    paragraph.trim() && <li key={`${selectedDepartement.code}-${blocItem.id}-${textItem.type_code}-${termItem.term_names}-${subdivisionTextIndex}-${paragraphIndex}`}
                                         className="bg-gray-200 my-2 p-2 rounded-sm">
-                                        <p>{paragraph}</p>
+                                        <p>{paragraph.charAt(0).toUpperCase() + paragraph.slice(1)}</p>
                                     </li>
                                 ))}
                             </ul>

@@ -8,15 +8,7 @@ import { getTextesDPVigilance } from './services/meteoFranceDPVigilance';
 
 import BulletinVigilanceDepartement from './components/BulletinVigilanceDepartement';
 import SearchCommune from './components/SearchCommune';
-
-const DATA_GOUV_FR_DECOUPAGE_ADMINISTRATIF_API_BASE_URL = 'https://geo.api.gouv.fr';
-
-const DATA_GOUV_FR_DECOUPAGE_ADMINISTRATIF_API_OPTIONS = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json'
-  }
-}
+import { getDepartement, listCommunes } from './services/geoAPIGouvDecoupageAdmin';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,10 +26,10 @@ const App = () => {
   const [bulletinDepartement, setBulletinDepartement] = useState(null);
   const [bulletinNational, setBulletinNational] = useState(null);
 
-  const fetchCommunes = async (nom = '') => {
+  const fetchCommunes = async (nomCommune = '') => {
     // console.log(`Calling fetchCommunes with '${nom}'`)
     
-    if(nom === '') {
+    if(nomCommune === '') {
       setCommunesList([]);
       return;
     }
@@ -46,9 +38,7 @@ const App = () => {
     setErrorMessageCommunes('');
 
     try {
-      const endpoint = `${DATA_GOUV_FR_DECOUPAGE_ADMINISTRATIF_API_BASE_URL}/communes?nom=${encodeURIComponent(nom)}`;
-
-      const response = await fetch(endpoint, DATA_GOUV_FR_DECOUPAGE_ADMINISTRATIF_API_OPTIONS);
+      const response = await listCommunes(nomCommune);
 
       if(!response.ok) {
         throw new Error('Failed to fetch communes');
@@ -82,9 +72,7 @@ const App = () => {
     setErrorMessageDepartement('');
 
     try {
-      const endpoint = `${DATA_GOUV_FR_DECOUPAGE_ADMINISTRATIF_API_BASE_URL}/departements/${encodeURIComponent(codeDepartement)}`;
-
-      const response = await fetch(endpoint, DATA_GOUV_FR_DECOUPAGE_ADMINISTRATIF_API_OPTIONS);
+      const response = await getDepartement(codeDepartement);
 
       if(!response.ok) {
         throw new Error('Failed to fetch departement');
