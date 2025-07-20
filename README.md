@@ -31,7 +31,7 @@ As a prerequisite, the ["vigilance-meteo-villes-back"](https://github.com/paulch
 
 ### 3. Configure the app (env variables)
 
-Create a copy of the .env.template file named .env.local (in the same folder, i.e. at the root of the project) and provide the relevant values (here replace domain placeholder with 'localhost').
+Create a copy of the .env.template file named .env.local (in the same folder, i.e. at the root of the project) and provide the relevant values (here replace backend domain placeholder with 'localhost', and replace backend port placeholder with relevant port).
 
 ### 4. Run the app
 
