@@ -4,6 +4,7 @@
 @import "tailwindcss";
 
 @theme {
+    /* https://pxhere.com/en/photo/1405958 */
     --background-image-hero-pattern: url("/hero-bg.png");
 
     --color-meteofr-blue: #073D79;

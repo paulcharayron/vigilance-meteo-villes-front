@@ -17,11 +17,11 @@ const BulletinVigilanceDepartement = ({
                     ? (
                         <div className="w-full flex flex-col items-center">
                             <p>{`${selectedCommune.nom} (${selectedDepartement.nom}, ${selectedDepartement.code})`}</p>
-                            <img
+                            <a href={encodeURI(`https://fr.wikipedia.org/wiki/${selectedDepartement.nom}_(département)`)} target="_blank"><img
                                 src={`${DEPARTEMENT_FLAG_BASE_URL}/${selectedDepartement.code}`}
                                 alt="drapeau departement"
                                 className="mt-1 h-8"
-                            />
+                            /></a>
                         </div>
                     )
                     : <p className="text-gray-200 italic">Sélectionnez une commune</p>

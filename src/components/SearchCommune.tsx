@@ -42,7 +42,7 @@ const SearchCommune = ({
                         {resultsList.map((commune: ICommune) => (
                             <li key={`${commune.code}-${commune.siren || 'nosiren'}`}>
                             <div
-                                onClick={() => handleResultSelection(commune.nom)}
+                                onClick={() => handleResultSelection(commune.nom, commune.codeDepartement)}
                                 className="p-2 hover:bg-gray-100 cursor-pointer"
                             >
                                 {commune.nom} ({commune.codeDepartement})

@@ -153,10 +153,10 @@ const App = () => {
     fetchDPVigilance();
   }, [selectedDepartement]);
 
-  const handleCommuneSelection = (nomCommune: string) => {
-      setBulletinDepartement(null);
+  const handleCommuneSelection = (nomCommune: string, codeDepartement: string) => {
+    setBulletinDepartement(null);
     
-    const selCommune = communesList.find((c) => c.nom == nomCommune);
+    const selCommune = communesList.find((c) => ((c.nom == nomCommune) && (c.codeDepartement == codeDepartement)));
     if(!selCommune) {
       return;
     }
